@@ -9,6 +9,7 @@
 ******************************************************************************/
 
 #pragma once
+#include <vector>
 
 class Neuron
 {
@@ -19,12 +20,25 @@ public:
 	Neuron();
 	~Neuron();
 
-
+/************************************************
+* ATTRIBUTES
+************************************************/
+private:
+	std::vector<double> Outputs;
+	size_t NumOfOutputs{ 0 };
 
 /************************************************
 * METHODS
 ************************************************/
+	/************************************************
+	* SETTERS
+	************************************************/
+public:
+	/* Sets the vector lengths by resizing them */
+	void SetVectorLength(int LengthIn);
 
+	/* Calculates the output */
+	void CalcResult(double* InputValue, std::vector<double>* WeightIn);
 
 	/************************************************
 	* GETTERS
@@ -32,5 +46,6 @@ public:
 public:
 	/* Returns the activation output of a neuron */
 	double GetNeuronOutput(double InputValue, double* Weight) { return InputValue * *Weight;  }
+	double GetNeuronOutput(int IndexRef) { return Outputs.at(IndexRef); }
 };
 

@@ -163,7 +163,7 @@ void RunFuzzifier()
 void RunSingleInputSingleOutput()
 {
 	// system variables
-	Neuron NNEuron;
+	Neuron NNeuron;
 
 	// User inputed values.
 	std::string PredictedCategory{ "Null" };
@@ -202,15 +202,75 @@ void RunSingleInputSingleOutput()
 	std::cout << "=================================\n";
 	for (size_t i = 0; i < NumOfInputs; i++)
 	{
-		std::cout << "Predicted " << PredictedCategory << " At (" << i + 1 << ") is: " << NNEuron.GetNeuronOutput(InputValues[i], &Weight) << std::endl;
+		std::cout << "Predicted " << PredictedCategory << " At (" << i + 1 << ") is: " << NNeuron.GetNeuronOutput(InputValues[i], &Weight) << std::endl;
 	}
+}
+
+/* Run 1 input neuron with multiple output neruons, one time */
+void RunSingleInputMultipleOutput()
+{
+	// system variables
+	Neuron NNeuron;
+
+	// User inputed values.
+	double InputValue{ 0.0f };
+	std::vector<double> WeightValues;
+	std::vector<std::string> Categories;
+	int NumOfOutputs{ 0 };
+
+
+	std::cout << "\n\n";
+	std::cout << "=================================\n";
+	std::cout << "==     Simple Network Setup    ==\n";
+	std::cout << "=================================\n";
+
+	// Get the number of outputs there are
+	std::cout << "\n\nHow many outputs do you want: ";
+	std::cin >> NumOfOutputs;
+	WeightValues.resize(NumOfOutputs);
+	Categories.resize(NumOfOutputs);
+	NNeuron.SetVectorLength(NumOfOutputs);
+
+	// Set the weight and output categories (we could the 'done' method from the fuzzifier as well/instead)
+	for (size_t i = 0; i < NumOfOutputs; i++)
+	{
+		std::string CategoryNameLocal{ "null" };
+		double WeightLocal{ 0.0f };
+
+		std::cout << "\n\nInput a result categoryh name: ";
+		std::cin >> CategoryNameLocal;
+
+		Categories.at(i) = CategoryNameLocal;
+
+		std::cout << "\nInput a weight for " << CategoryNameLocal << ": ";
+		std::cin >> WeightLocal;
+
+		WeightValues.at(i) = WeightLocal;
+	}
+
+	// get the input
+	std::cout << "\n\nEnter your INPUT value: ";
+	std::cin >> InputValue;
+
+	// Return the predicted values
+	std::cout << "\n\n";
+	std::cout << "=================================\n";
+	std::cout << "==     imple Network Outputs   ==\n";
+	std::cout << "=================================\n";
+	NNeuron.CalcResult(&InputValue, &WeightValues);
+	for (size_t i = 0; i < NumOfOutputs; i++)
+	{
+		std::cout << "The prdicted value for " << Categories.at(i) << " is: " << NNeuron.GetNeuronOutput(i) << "\n";
+	}
+
 }
 
 int main()
 {
 	//RunRandTest();
 	//RunFuzzifier();
-	RunSingleInputSingleOutput();
+	//RunSingleInputSingleOutput();
+	RunSingleInputMultipleOutput();
 	
 
 	return 0;
