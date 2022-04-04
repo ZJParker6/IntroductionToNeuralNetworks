@@ -15,6 +15,11 @@ void Neuron::SetVectorLength(int LengthIn)
 	NumOfOutputs = LengthIn;
 }
 
+void Neuron::SetHiddenVectorLength(int LengthIn)
+{
+	HiddenOutputs.resize(LengthIn);
+}
+
 void Neuron::CalcResult(double* InputValue, std::vector<double>* WeightIn)
 {
 	for (size_t i = 0; i < NumOfOutputs; i++)
@@ -42,13 +47,24 @@ double Neuron::MultipleInSingleOut(std::vector<double>* InputValues, std::vector
 	return Outputs.at(0);
 }
 
-void Neuron::MultipleInMultipleOut(std::vector<double>* InputVales, std::vector<std::vector<double>>* WeightsIn)
+void Neuron::MultipleInMultipleOut(std::vector<double>* InputValues, std::vector<std::vector<double>>* WeightsIn)
 {
 	for (size_t k = 0; k < WeightsIn->size(); k++)
 	{
 		for (size_t i = 0; i < WeightsIn->at(k).size(); i++)
 		{
-			Outputs.at(k) += InputVales->at(i) * WeightsIn->at(i).at(k);
+			Outputs.at(k) += InputValues->at(i) * WeightsIn->at(i).at(k);
+		}
+	}
+}
+
+void Neuron::MultipleHidden(std::vector<double>* InputValues, std::vector<std::vector<double>>* WeightsIn)
+{
+	for (size_t k = 0; k < WeightsIn->size(); k++)
+	{
+		for (size_t i = 0; i < WeightsIn->at(k).size(); i++)
+		{
+			HiddenOutputs.at(k) += InputValues->at(i) * WeightsIn->at(i).at(k);
 		}
 	}
 }

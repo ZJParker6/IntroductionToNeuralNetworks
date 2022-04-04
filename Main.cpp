@@ -400,6 +400,127 @@ void RunMultipleInputMultipleOutput()
 	}
 }
 
+/* Hidden Layer */
+void RunHiddenLayerNetwork()
+{
+	// system variables
+	Neuron NNeuron;
+
+	// User inputed values.
+	std::vector<double> InputValues, HiddenValues;
+	std::vector<std::vector<double>> HiddenWeightMatrix, OutWeightMatrix;
+	int NumOfInputs{ 0 }, NumOfHiddenNeurons{ 0 }, NumOfOutputs{ 0 };
+	std::vector<std::string> OutCategories;
+
+
+	std::cout << "\n\n";
+	std::cout << "=================================\n";
+	std::cout << "==     Simple Network Setup    ==\n";
+	std::cout << "=================================\n";
+
+	// Get the number of inputs
+	std::cout << "\n\nEnter number of inputs: ";
+	std::cin >> NumOfInputs;
+	InputValues.resize(NumOfInputs);
+
+	// Get the number of hidden neurons
+	std::cout << "\n\nEnter number of hidden neurons: ";
+	std::cin >> NumOfHiddenNeurons;
+	HiddenValues.resize(NumOfHiddenNeurons);
+	NNeuron.SetHiddenVectorLength(NumOfHiddenNeurons);
+
+	// Get the number of outputs
+	std::cout << "\n\nEnter number of outputs: ";
+	std::cin >> NumOfOutputs;
+	OutCategories.resize(NumOfOutputs);
+	NNeuron.SetVectorLength(NumOfOutputs);
+
+	/* resize the hidden vector */
+	HiddenWeightMatrix.resize(NumOfHiddenNeurons);
+	for (size_t i = 0; i < NumOfHiddenNeurons; i++)
+	{
+		HiddenWeightMatrix[i].resize(NumOfInputs);
+	}
+
+	/* resize the output vector */
+	OutWeightMatrix.resize(NumOfOutputs);
+	for (size_t i = 0; i < NumOfOutputs; i++)
+	{
+		OutWeightMatrix[i].resize(NumOfHiddenNeurons);
+	}
+
+	// Set the output categories
+	for (size_t i = 0; i < NumOfOutputs; i++)
+	{
+		std::string CategoryNameLocal{ "null" };
+
+		std::cout << "\n\nInput a result category name: ";
+		std::cin >> CategoryNameLocal;
+
+		OutCategories.at(i) = CategoryNameLocal;
+	}
+
+	std::cout << "\n\n";
+	std::cout << "=================================\n";
+	std::cout << "==          Input Setup        ==\n";
+	std::cout << "=================================\n";
+	// Set the input values and weights
+	for (size_t i = 0; i < NumOfInputs; i++)
+	{
+		std::string CategoryNameLocal{ "null" };
+		double InputValueLocal{ 0.0f }, WeightLocal{ 0.0f };
+
+		std::cout << "\n\nInput a name for this input: ";
+		std::cin >> CategoryNameLocal;
+
+		std::cout << "\nEnter input value for " << CategoryNameLocal << ": ";
+		std::cin >> InputValueLocal;
+
+		InputValues.at(i) = InputValueLocal;
+
+		for (size_t k = 0; k < NumOfHiddenNeurons; k++)
+		{
+			std::cout << "\nInput a weight for " << CategoryNameLocal << " to  hidden neuron" << k << ": ";
+			std::cin >> WeightLocal;
+
+			HiddenWeightMatrix.at(i).at(k) = WeightLocal;
+		}
+	}
+
+	std::cout << "\n\n";
+	std::cout << "=================================\n";
+	std::cout << "==         Hidden Setup        ==\n";
+	std::cout << "=================================\n";
+	// Set the hidden weights
+	for (size_t i = 0; i < NumOfHiddenNeurons; i++)
+	{
+		std::cout << "\n\nInput Weight for Hidden Neuron " << i << ": ";
+
+		for (size_t k = 0; k < OutCategories.size(); k++)
+		{
+			double WeightLocal{ 0.0f };
+
+			std::cout << "\nInput a weight to " << OutCategories.at(k) << ": ";
+			std::cin >> WeightLocal;
+
+			OutWeightMatrix.at(i).at(k) = WeightLocal;
+		}
+	}
+
+	//  Calculate and return the output
+	std::cout << "\n\n";
+	std::cout << "=================================\n";
+	std::cout << "==    Simple Network Outputs   ==\n";
+	std::cout << "=================================\n";
+	NNeuron.MultipleHidden(&InputValues, &HiddenWeightMatrix);
+	HiddenValues = NNeuron.GetHiddenOutputs();
+	NNeuron.MultipleInMultipleOut(&HiddenValues, &OutWeightMatrix);
+	for (size_t i = 0; i < NumOfOutputs; i++)
+	{
+		std::cout << "The predicted value for " << OutCategories.at(i) << " is: " << NNeuron.GetNeuronOutput(i) << "\n";
+	}
+}
+
 int main()
 {
 	//RunRandTest();
@@ -407,7 +528,8 @@ int main()
 	//RunSingleInputSingleOutput();
 	//RunSingleInputMultipleOutput();
 	//RunMultipleInputSingleOutput();
-	RunMultipleInputMultipleOutput();
+	//RunMultipleInputMultipleOutput();
+	RunHiddenLayerNetwork();
 
 	return 0;
 }

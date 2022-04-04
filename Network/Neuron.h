@@ -24,7 +24,7 @@ public:
 * ATTRIBUTES
 ************************************************/
 private:
-	std::vector<double> Outputs;
+	std::vector<double> Outputs, HiddenOutputs;
 	size_t NumOfOutputs{ 0 };
 
 /************************************************
@@ -36,12 +36,14 @@ private:
 public:
 	/* Sets the vector lengths by resizing them */
 	void SetVectorLength(int LengthIn);
+	void SetHiddenVectorLength(int LengthIn);
 
 	/* Calculates the output */
 	void CalcResult(double* InputValue, std::vector<double>* WeightIn);
 	double CalcResult(std::vector<double>* InputValues, std::vector<double>* WeightsIn);
 	double MultipleInSingleOut(std::vector<double>* InputValues, std::vector<double>* WeightsIn, int VectorLengthIn);
-	void MultipleInMultipleOut(std::vector<double>* InputVales, std::vector<std::vector<double>>* WeightsIn);
+	void MultipleInMultipleOut(std::vector<double>* InputValues, std::vector<std::vector<double>>* WeightsIn);
+	void MultipleHidden(std::vector<double>* InputValues, std::vector<std::vector<double>>* WeightsIn);
 	/************************************************
 	* GETTERS
 	************************************************/
@@ -49,5 +51,7 @@ public:
 	/* Returns the activation output of a neuron */
 	double GetNeuronOutput(double InputValue, double* Weight) { return InputValue * *Weight;  }
 	double GetNeuronOutput(int IndexRef) { return Outputs.at(IndexRef); }
+	/* Returns all the outputs of a hidden neuron*/
+	std::vector<double> GetHiddenOutputs() { return HiddenOutputs;  }
 };
 
