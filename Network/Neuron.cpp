@@ -41,3 +41,14 @@ double Neuron::MultipleInSingleOut(std::vector<double>* InputValues, std::vector
 	Outputs.at(0) = CalcResult(InputValues, WeightsIn);
 	return Outputs.at(0);
 }
+
+void Neuron::MultipleInMultipleOut(std::vector<double>* InputVales, std::vector<std::vector<double>>* WeightsIn)
+{
+	for (size_t k = 0; k < WeightsIn->size(); k++)
+	{
+		for (size_t i = 0; i < WeightsIn->at(k).size(); i++)
+		{
+			Outputs.at(k) += InputVales->at(i) * WeightsIn->at(i).at(k);
+		}
+	}
+}

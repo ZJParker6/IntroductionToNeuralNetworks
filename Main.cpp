@@ -316,13 +316,98 @@ void RunMultipleInputSingleOutput()
 	std::cout << "Output: " << NNeuron.MultipleInSingleOut(&InputValues, &WeightValues, NumOfInputs);
 }
 
+/* Run multiple input neruons with multiple output neurons*/
+void RunMultipleInputMultipleOutput()
+{
+	// system variables
+	Neuron NNeuron;
+
+	// User inputed values.
+	std::vector<double> InputValues;
+	std::vector<std::vector<double>> WeightMatrix;
+	int NumOfInputs{ 0 }, NumOfOutputs{ 0 };
+	std::vector<std::string> OutCategories;
+
+
+	std::cout << "\n\n";
+	std::cout << "=================================\n";
+	std::cout << "==     Simple Network Setup    ==\n";
+	std::cout << "=================================\n";
+
+	// Get the number of inputs
+	std::cout << "\n\nEnter number of inputs: ";
+	std::cin >> NumOfInputs;
+	InputValues.resize(NumOfInputs);
+
+	// Get the number of outputs
+	std::cout << "\n\nEnter number of outputs: ";
+	std::cin >> NumOfOutputs;
+	OutCategories.resize(NumOfOutputs);
+	NNeuron.SetVectorLength(NumOfOutputs);
+
+	WeightMatrix.resize(NumOfInputs);
+	for (size_t i = 0; i < NumOfInputs; i++)
+	{
+		WeightMatrix[i].resize(NumOfInputs);
+	}
+
+	std::cout << "\n\n";
+	std::cout << "=================================\n";
+	std::cout << "==          Input Setup        ==\n";
+	std::cout << "=================================\n";
+	// Set the output categories
+	for (size_t i = 0; i < NumOfOutputs; i++)
+	{
+		std::string CategoryNameLocal{ "null" };
+
+		std::cout << "\n\nInput a result category name: ";
+		std::cin >> CategoryNameLocal;
+
+		OutCategories.at(i) = CategoryNameLocal;
+	}
+
+	for (size_t i = 0; i < NumOfInputs; i++)
+	{
+		std::string CategoryNameLocal{ "null" };
+		double InputValueLocal{ 0.0f }, WeightLocal{ 0.0f };
+
+		std::cout << "\n\nInput a name for this input: ";
+		std::cin >> CategoryNameLocal;
+
+		std::cout << "\nEnter input value for " << CategoryNameLocal << ": ";
+		std::cin >> InputValueLocal;
+
+		InputValues.at(i) = InputValueLocal;
+
+		for (size_t k = 0; k < OutCategories.size(); k++)
+		{
+			std::cout << "\nInput a weight for " << CategoryNameLocal << " to " << OutCategories.at(k) << ": ";
+			std::cin >> WeightLocal;
+
+			WeightMatrix.at(i).at(k) = WeightLocal;
+		}
+	}
+
+	//  Calculate and return the output
+	std::cout << "\n\n";
+	std::cout << "=================================\n";
+	std::cout << "==    Simple Network Outputs   ==\n";
+	std::cout << "=================================\n";
+	NNeuron.MultipleInMultipleOut(&InputValues, &WeightMatrix);
+	for (size_t i = 0; i < NumOfOutputs; i++)
+	{
+		std::cout << "The predicted value for " << OutCategories.at(i) << " is: " << NNeuron.GetNeuronOutput(i) << "\n";
+	}
+}
+
 int main()
 {
 	//RunRandTest();
 	//RunFuzzifier();
 	//RunSingleInputSingleOutput();
 	//RunSingleInputMultipleOutput();
-	RunMultipleInputSingleOutput();
+	//RunMultipleInputSingleOutput();
+	RunMultipleInputMultipleOutput();
 
 	return 0;
 }
