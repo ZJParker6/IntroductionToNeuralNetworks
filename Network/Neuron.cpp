@@ -1,4 +1,5 @@
 #include "Neuron.h"
+#include "..\Utilities\MathUtils.h"
 
 Neuron::Neuron()
 {
@@ -11,7 +12,10 @@ Neuron::~Neuron()
 void Neuron::SetVectorLength(int LengthIn)
 {
 	Outputs.resize(LengthIn);
-
+	UpwardPrediction.resize(LengthIn);
+	UpError.resize(LengthIn);
+	DownwardPrediction.resize(LengthIn);
+	DownError.resize(LengthIn);
 	NumOfOutputs = LengthIn;
 }
 
@@ -67,4 +71,68 @@ void Neuron::MultipleHidden(std::vector<double>* InputValues, std::vector<std::v
 			HiddenOutputs.at(k) += InputValues->at(i) * WeightsIn->at(i).at(k);
 		}
 	}
+}
+
+void Neuron::ResetAllResults(int OutputLengthIn, int HiddenLengthIn)
+{
+	Outputs.clear();
+	HiddenOutputs.clear();
+	UpwardPrediction.clear();
+	UpError.clear();
+	DownwardPrediction.clear();
+	DownError.clear();
+
+	Outputs.resize(OutputLengthIn);
+	HiddenOutputs.resize(HiddenLengthIn);
+	UpwardPrediction.resize(OutputLengthIn);
+	UpError.resize(OutputLengthIn);
+	DownwardPrediction.resize(OutputLengthIn);
+	DownError.resize(OutputLengthIn);
+
+}
+
+void Neuron::CalcError(double ExpectedIn, double ObservedIn)
+{
+	Error = 0.0f;
+	if (UMath::ValueSign(ExpectedIn) == 1)
+	{
+		Error = ObservedIn - ExpectedIn;
+	}
+	else
+	{
+		Error = ObservedIn + ExpectedIn;
+	}
+}
+
+void Neuron::CalcLossFunction()
+{
+	Loss = powf(Error, 2);
+}
+
+void Neuron::CalcUpwardPrediction(std::vector<double>* InputValues, std::vector<std::vector<double>>* WeightsIn, double& StepAmountIn)
+{
+	for (size_t k = 0; k < WeightsIn->size(); k++)
+	{
+		for (size_t i = 0; i < WeightsIn->at(k).size(); i++)
+		{
+			UpwardPrediction.at(k) += InputValues->at(i) * (WeightsIn->at(i).at(k) + StepAmountIn);
+		}
+	}
+}
+
+void Neuron::CalcDownPrediction(std::vector<double>* InputValues, std::vector<std::vector<double>>* WeightsIn, double& StepAmountIn)
+{
+	for (size_t k = 0; k < WeightsIn->size(); k++)
+	{
+		for (size_t i = 0; i < WeightsIn->at(k).size(); i++)
+		{
+			DownwardPrediction.at(k) += InputValues->at(i) * (WeightsIn->at(i).at(k) - StepAmountIn);
+		}
+	}
+}
+
+void Neuron::CaldPredictionErrors(double ExpectedIn, int IndexRef)
+{
+	UpError.at(IndexRef) = powf((UpwardPrediction.at(IndexRef) - ExpectedIn), 2);
+	DownError.at(IndexRef) = powf((DownwardPrediction.at(IndexRef) - ExpectedIn), 2);
 }
