@@ -39,7 +39,8 @@ public:
 
 	/* Calculates the output */
 	void CalcResult(double* InputValue, std::vector<double>* WeightIn);
-
+	double CalcResult(std::vector<double>* InputValues, std::vector<double>* WeightsIn);
+	double MultipleInSingleOut(std::vector<double>* InputValues, std::vector<double>* WeightsIn, int VectorLengthIn);
 	/************************************************
 	* GETTERS
 	************************************************/

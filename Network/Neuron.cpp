@@ -22,3 +22,22 @@ void Neuron::CalcResult(double* InputValue, std::vector<double>* WeightIn)
 		Outputs.at(i) = *InputValue * WeightIn->at(i);
 	}
 }
+
+double Neuron::CalcResult(std::vector<double>* InputValues, std::vector<double>* WeightsIn)
+{
+	double OutputLocal{ 0.0f };
+
+	for (size_t i = 0; i < NumOfOutputs; i++)
+	{
+		OutputLocal += InputValues->at(i) * WeightsIn->at(i);
+	}
+	return OutputLocal;
+}
+
+double Neuron::MultipleInSingleOut(std::vector<double>* InputValues, std::vector<double>* WeightsIn, int VectorLengthIn)
+{
+	Outputs.resize(1);
+	NumOfOutputs = VectorLengthIn;
+	Outputs.at(0) = CalcResult(InputValues, WeightsIn);
+	return Outputs.at(0);
+}
