@@ -139,10 +139,12 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Network\Neuron.cpp" />
     <ClCompile Include="Utilities\Fuzzifier.cpp" />
     <ClCompile Include="Main.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Network\Neuron.h" />
     <ClInclude Include="Utilities\Fuzzifier.h" />
     <ClInclude Include="Utilities\MathUtils.h" />
   </ItemGroup>

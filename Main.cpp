@@ -13,6 +13,7 @@
 #include <vector>
 #include "Utilities\MathUtils.h"
 #include "Utilities\Fuzzifier.h"
+#include "Network\Neuron.h"
 
 bool CompareStrings(std::string& Str1, std::string& Str2)
 {
@@ -99,7 +100,7 @@ void RunFuzzifier()
 
 		std::cout << "\nTypoe in the values for the low, miod, and high values for " << FuzzPtr[i]->GetCategoryName() << " Category. \n";
 		std::cout << "Seperate the values with spaces (e.g., 1.0 1.5 2.0) \n";
-		std::cout << "Low, Mid, High Vlaues: \n\n";
+		std::cout << "Low, Mid, High Values: \n\n";
 
 		std::cin >> InputLow >> InputMid >> InputHigh;
 		FuzzPtr[i]->SetValues(InputLow, InputMid, InputHigh);
@@ -158,11 +159,58 @@ void RunFuzzifier()
 
 }
 
+/* Run 1 input neruon multiple times with 1 output neuron, each time */
+void RunSingleInputSingleOutput()
+{
+	// system variables
+	Neuron NNEuron;
+
+	// User inputed values.
+	std::string PredictedCategory{ "Null" };
+	std::vector<double> InputValues;
+	int NumOfInputs;
+	double Weight;
+
+	std::cout << "\n\n";
+	std::cout << "=================================\n";
+	std::cout << "==     Simple Network Setup    ==\n";
+	std::cout << "=================================\n";
+
+	// prompt the user to add predicted name
+	std::cout << "Please enter what you are predicting: ";
+	std::cin >> PredictedCategory;
+
+	// Get the number of inputs there are
+	std::cout << "\n\nHow many predictor variables would you like to include: ";
+	std::cin >> NumOfInputs;
+	InputValues.resize(NumOfInputs);
+
+	for (size_t i = 0; i < NumOfInputs; i++)
+	{
+		std::cout << "\nPlease enter an input value (the predictor): ";
+		std::cin >> InputValues.at(i);
+	}
+
+	// Get the weight
+	std::cout << "\n\nPlease enter the weight: ";
+	std::cin >> Weight;
+
+	// Return the predicted values
+	std::cout << "\n\n";
+	std::cout << "=================================\n";
+	std::cout << "==     imple Network Outputs   ==\n";
+	std::cout << "=================================\n";
+	for (size_t i = 0; i < NumOfInputs; i++)
+	{
+		std::cout << "Predicted " << PredictedCategory << " At (" << i + 1 << ") is: " << NNEuron.GetNeuronOutput(InputValues[i], &Weight) << std::endl;
+	}
+}
 
 int main()
 {
 	//RunRandTest();
-	RunFuzzifier();
+	//RunFuzzifier();
+	RunSingleInputSingleOutput();
 	
 
 	return 0;

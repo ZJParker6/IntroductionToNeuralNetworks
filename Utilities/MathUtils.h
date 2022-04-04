@@ -12,6 +12,7 @@
 #include <cmath>
 #include <random>
 #include <set>
+#include <stdexcept>
 
 namespace UMath
 {
